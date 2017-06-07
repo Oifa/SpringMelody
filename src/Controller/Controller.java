@@ -25,7 +25,6 @@ import javafx.util.Duration;
 
 import java.io.File;
 import java.net.URL;
-import java.nio.file.Path;
 import java.util.ResourceBundle;
 
 
@@ -49,7 +48,7 @@ public class Controller implements Initializable {
     private static final double MIN_CHANGE = 0.5;
 
 
-    File file = new File("B:\\Programs\\Java\\SpringMelody\\src\\Model\\vacation-1.mp3");
+    File file = new File("B:\\Programs\\Java\\SpringMelody\\src\\Controller\\vacation-1.mp3");
     Media media = new Media(file.toURI().toString());
     MediaPlayer mediaPlayer = new MediaPlayer(media);
 
@@ -57,7 +56,7 @@ public class Controller implements Initializable {
     @FXML
     private void LoadMusic(ActionEvent event) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("View/music.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("music.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             Stage stage = new Stage();
             stage.setTitle("Music");
