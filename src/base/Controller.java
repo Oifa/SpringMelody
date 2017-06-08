@@ -1,7 +1,6 @@
-package Controller;
+package base;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTextField;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
@@ -18,6 +17,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
@@ -45,12 +45,15 @@ public class Controller implements Initializable {
     @FXML
     private ListView<String> listOfSong;
 
+    @FXML
+    private MediaView videoView;
+
     private static final double MIN_CHANGE = 0.5;
 
+        String path = new File("src/base/vacation-1.mp3").getAbsolutePath();
+        Media media = new Media(new File(path).toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
 
-    File file = new File("B:\\Programs\\Java\\SpringMelody\\src\\Controller\\vacation-1.mp3");
-    Media media = new Media(file.toURI().toString());
-    MediaPlayer mediaPlayer = new MediaPlayer(media);
 
 
     @FXML
@@ -70,7 +73,7 @@ public class Controller implements Initializable {
     @FXML
     private void LoadVideo(ActionEvent event) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("View/video.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("video.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             Stage stage = new Stage();
             stage.setTitle("Video");
@@ -84,7 +87,7 @@ public class Controller implements Initializable {
     @FXML
     private void LoadSlide(ActionEvent event) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("View/slide.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("slide.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             Stage stage = new Stage();
             stage.setTitle("Slide");
@@ -98,7 +101,7 @@ public class Controller implements Initializable {
     @FXML
     private void LoadText(ActionEvent event) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("View/text.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("text.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             Stage stage = new Stage();
             stage.setTitle("Text");
@@ -110,9 +113,9 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    private void LoadDoc(ActionEvent event) {
+    private void LoadDocument(ActionEvent event) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("View/document.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("document.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             Stage stage = new Stage();
             stage.setTitle("Document");
@@ -127,7 +130,7 @@ public class Controller implements Initializable {
     @FXML
     private void LoadAnsware(ActionEvent event) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("View/answare.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("answare.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             Stage stage = new Stage();
             stage.setTitle("Ask");
@@ -143,6 +146,7 @@ public class Controller implements Initializable {
         btnPlay.setOnAction((ActionEvent event) -> {
             System.out.println("Playing...");
             mediaPlayer.play();
+
 
             /*  This code is used for the music slider.
             *   Code include: value of the music state, changing state, current time,
@@ -173,9 +177,10 @@ public class Controller implements Initializable {
             stateSlider.valueProperty().addListener(new ChangeListener<Number>() {
                 public void changed(ObservableValue<? extends Number> ov, Number oldValue, Number newValue) {
                     currentTime.setText(String.format("%02d", newValue.intValue()));
-                    totalDuration.setText(String.format("%.2f", (volumeSlider.getValue() / 180)*6));
+                    totalDuration.setText(String.format("%2s", (int)volumeSlider.getValue()));
                 }
             });
+
 
             /*  This code changing volume of music.
             *   Min state = 0; max state = 100
@@ -197,7 +202,6 @@ public class Controller implements Initializable {
     @FXML
     public void Pause() {
         btnPause.setOnAction((ActionEvent e) -> {
-            System.out.println("PAUSE");
             mediaPlayer.pause();
         });
     }
@@ -253,7 +257,7 @@ public class Controller implements Initializable {
 
 
     @FXML
-    public void Open() {
+    private void Open() {
         btnOpen.setOnAction((ActionEvent e) -> {
             try {
                 FileChooser fileChooser = new FileChooser();
@@ -264,6 +268,9 @@ public class Controller implements Initializable {
                 media = new Media(new File(path).toURI().toString());
                 mediaPlayer.stop();
                 mediaPlayer = new MediaPlayer(media);
+                File tempFile = new File(path.trim());
+                String fileName = tempFile.getName();
+                listOfSong.getItems().addAll(fileName);
             } catch (Exception e1) {
                 System.out.println("Exit");
             }
